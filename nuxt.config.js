@@ -21,6 +21,7 @@ export default {
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
+    '~plugins/axios',
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -41,7 +42,13 @@ export default {
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
-  axios: {},
+  axios: {
+    browserBaseURL: 'https://erstvermietung.emonitor.ch/api/objects',
+    headers: {
+        'Accept': 'application/json',
+    },
+    debug: false
+  },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
   vuetify: {
