@@ -25,8 +25,7 @@
               <div
                 v-for="(header, index) in headers"
                 :key="index"
-                class="d-flex justify-center align-center py-3"
-                style="border: 1px solid #4a4747;"
+                class="header-list d-flex justify-center align-center py-3 mb-1"
               >
                 {{ header.text }}
               </div>
@@ -78,5 +77,12 @@ export default {
   .ghost {
     opacity: 0.2;
     background: white;
+  }
+
+  .header-list {
+    border: 1px solid rgb(236 236 236);
+    border-radius: 4px;
+    background-color: #f3f3f3;
+    cursor: pointer;
   }
 </style>

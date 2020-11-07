@@ -1,7 +1,7 @@
 <template>
   <v-row justify="center" align="center">
     <v-col cols="12">
-      <v-tabs v-model="selected">
+      <v-tabs v-model="selected" style="border-bottom: thin solid rgba(0, 0, 0, 0.12);">
         <v-tab
           v-for="(link, index) in navLinks"
           :key="link + '_' + index"
