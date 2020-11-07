@@ -18,12 +18,12 @@
           <v-col class="pa-6">
             <draggable
               ghost-class="ghost"
-              :list="tableHeaders"
+              :list="headers"
               @start="dragging = true"
               @end="dragging = false"
             >
               <div
-                v-for="(header, index) in tableHeaders"
+                v-for="(header, index) in headers"
                 :key="index"
                 class="d-flex justify-center align-center py-3"
                 style="border: 1px solid #4a4747;"
@@ -46,6 +46,8 @@ export default {
     draggable
   },
 
+  props: ['headers'],
+
   data () {
     return {
       dialog: false,
@@ -55,9 +57,8 @@ export default {
   },
 
   created () {
-    this.$nuxt.$on('open-settings', (headers) => {
+    this.$nuxt.$on('open-settings', () => {
       this.dialog = true
-      this.tableHeaders = headers
     })
   },
 
