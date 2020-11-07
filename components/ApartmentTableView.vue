@@ -5,7 +5,9 @@
         <div class="d-flex align-center" style="height: 100%;">
           <v-icon
             @click="$nuxt.$emit('open-settings')"
-          >mdi-cog</v-icon>
+          >
+            mdi-cog
+          </v-icon>
         </div>
       </v-col>
       <v-col>
@@ -13,7 +15,7 @@
           <v-btn
             depressed
             color="primary"
-            @click="addDialog = true"
+            @click="openAdd"
           >
             <v-icon>mdi-plus</v-icon>
             Add
@@ -27,22 +29,25 @@
           :items="apartments"
           :headers="headers"
         >
-          <template v-slot:[`item.building`]={item}>
+          <template v-slot:[`item.building`]="{item}">
             {{ item.building ? item.building.adress : '' }}
           </template>
-          <template v-slot:[`item.lift`]={item}>
+          <template v-slot:[`item.lift`]="{item}">
             {{ item.lift ? 'Yes' : 'No' }}
           </template>
           <!-- table action buttons -->
-          <template v-slot:[`item.actions`]={item}>
+          <template v-slot:[`item.actions`]="{item}">
             <v-btn
               depressed
               color="primary"
+              @click="openEdit(item)"
             >
               <v-icon
                 color="white"
                 size="16"
-              >mdi-pencil</v-icon>
+              >
+                mdi-pencil
+              </v-icon>
             </v-btn>
             <v-btn
               depressed
@@ -52,7 +57,8 @@
               <v-icon
                 color="white"
                 size="16"
-              >mdi-delete
+              >
+                mdi-delete
               </v-icon>
             </v-btn>
           </template>
@@ -61,56 +67,56 @@
     </v-row>
 
     <v-dialog
-      width="400"
       v-model="addDialog"
+      width="400"
       @click:outside="closeAddDialog"
     >
       <v-card>
         <v-toolbar color="primary" dark class="elevation-0">
-            <v-toolbar-title>Add</v-toolbar-title>
+          <v-toolbar-title>{{ dialogTitle }}</v-toolbar-title>
 
-            <v-spacer></v-spacer>
+          <v-spacer />
 
-            <v-btn @click.native="closeAddDialog" dark icon>
-                <v-icon>mdi-close</v-icon>
-            </v-btn>
+          <v-btn dark icon @click.native="closeAddDialog">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
         </v-toolbar>
 
-        <v-container class="pt-8 px-6">{{form}}
+        <v-container class="pt-8 px-6">
           <v-row v-for="item in items" :key="item.name">
             <v-col>
               <!-- Textfield -->
               <v-text-field
-                  dense
-                  :name="item.name"
-                  :type="item.type"
-                  outlined
-                  :placeholder="item.rules && item.rules.includes('required') ? 'Required...' : ''"
-                  :label="item.title"
-                  v-if="item.tag === 'input'"
-                  v-model="form[item.name]"
-              ></v-text-field>
+                v-if="item.tag === 'input'"
+                v-model="form[item.name]"
+                dense
+                :name="item.name"
+                :type="item.type"
+                outlined
+                :placeholder="item.rules && item.rules.includes('required') ? 'Required...' : ''"
+                :label="item.title"
+              />
 
               <!-- Select field -->
               <v-select
+                v-if="item.tag === 'select'"
+                v-model="form[item.name]"
                 outlined
                 dense
                 :placeholder="item.rules ? 'Obavezno..' : ''"
                 :items="item.source"
                 :label="item.title"
                 :name="item.name"
-                v-if="item.tag === 'select'"
-                v-model="form[item.name]">
-              </v-select>
+              />
 
               <!-- Checkbox -->
               <v-checkbox
+                v-if="item.tag === 'checkbox'"
+                v-model="form[item.name]"
                 dense
                 :name="item.name"
                 :label="item.title"
-                v-if="item.tag === 'checkbox'"
-                v-model="form[item.name]">
-              </v-checkbox>
+              />
             </v-col>
           </v-row>
           <v-row>
@@ -120,7 +126,7 @@
                 depressed
                 class="text-none mr-3"
                 large
-                @click="addApartment"
+                @click="handleAction"
               >
                 Save
               </v-btn>
@@ -146,7 +152,8 @@
     >
       <v-card>
         <v-card-title
-            primary-title>
+          primary-title
+        >
           Are you sure?
         </v-card-title>
 
@@ -154,12 +161,16 @@
           Are you sure you want to delete the selected resource?
         </v-card-text>
 
-        <v-divider></v-divider>
+        <v-divider />
 
         <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn class="text-none" @click="deleteDialog = false" depressed large outlined>Odustani</v-btn>
-          <v-btn class="text-none" color="error" @click="deleteApartment" depressed large>Izbriši</v-btn>
+          <v-spacer />
+          <v-btn class="text-none" depressed large outlined @click="deleteDialog = false">
+            Odustani
+          </v-btn>
+          <v-btn class="text-none" color="error" depressed large @click="deleteApartment">
+            Izbriši
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -191,6 +202,7 @@ export default {
       ],
       deleteDialog: false,
       addDialog: false,
+      dialogTitle: null,
       form: {
         lift: false
       },
@@ -254,11 +266,33 @@ export default {
       this.title = title
     },
 
+    openAdd () {
+      this.dialogTitle = 'Add'
+      this.addDialog = true
+    },
+
     closeAddDialog () {
       this.addDialog = false
       this.form = {
         lift: false
       }
+    },
+
+    openEdit (item) {
+      this.dialogTitle = 'Edit'
+      const { title, state, area, rooms, lift, building, rentalgross } = item
+
+      this.form = {
+        title,
+        state,
+        area,
+        rooms,
+        lift,
+        rentalgross
+      }
+      this.form.adress = building ? building.adress : null
+
+      this.addDialog = true
     },
 
     deleteApartment () {
@@ -269,10 +303,33 @@ export default {
         })
     },
 
+    handleAction () {
+      /* parsing form data */
+      this.form.area = parseInt(this.form.area) || null
+      this.form.rooms = parseFloat(this.form.rooms) || null
+      this.form.rentalgross = parseInt(this.form.rentalgross) || null
+
+      this.form.building = { adress: this.form.adress }
+
+      if (this.dialogTitle === 'Add') {
+        this.addApartment()
+      } else {
+        this.updateApartment()
+      }
+    },
+
     addApartment () {
       this.$store.dispatch('addApartment', this.form)
         .then(() => {
-          this.addDialog = false
+          this.closeAddDialog()
+          this.$nuxt.$emit('show-snackbar', true)
+        })
+    },
+
+    updateApartment () {
+      this.$store.dispatch('updateApartment', { form: this.form, title: this.title })
+        .then(() => {
+          this.closeAddDialog()
           this.$nuxt.$emit('show-snackbar', true)
         })
     }

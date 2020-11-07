@@ -20,24 +20,27 @@ export const mutations = {
   },
 
   addApartment (state, form) {
-    /* parsing form data */
-    form.area = parseInt(form.area) || null
-    form.rooms = parseFloat(form.rooms) || null
-    form.rentalgross = parseInt(form.rentalgross) || null
-
-    form.building = { adress: form.adress }
-
     /* generate unique ID */
     form.title = '_' + Math.random().toString(36).substr(2, 9)
 
     state.apartments.push(form)
+  },
+
+  updateApartment (state, { form, title }) {
+    const index = state.apartments.findIndex(apartment => apartment.title === title)
+
+    state.apartments.splice(index, 1, form)
   }
 }
 
 export const actions = {
   async getApartments ({ commit }) {
-    const { data } = await this.$axios.get('/')
-    commit('setApartments', data)
+    /* await this.$axios.get('/')
+      .then((res) => {
+        if (res.status === 200) {
+          commit('setApartments', res.data)
+        }
+      }) */
   },
 
   deleteApartment ({ commit }, title) {
@@ -46,5 +49,9 @@ export const actions = {
 
   addApartment ({ commit }, form) {
     commit('addApartment', form)
+  },
+
+  updateApartment ({ commit }, { form, title }) {
+    commit('updateApartment', { form, title })
   }
 }

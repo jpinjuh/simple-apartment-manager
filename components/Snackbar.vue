@@ -1,22 +1,24 @@
 <template>
   <v-snackbar
+    v-model="model"
     :bottom="false"
     :color="color"
     :left="false"
     :right="true"
     :timeout="timeout"
     :top="true"
-    v-model="model">
-      {{ text }}
+  >
+    {{ text }}
     <template v-slot:action="{ attrs }">
-        <v-btn
-          @click="model = false"
-          color="white"
-          dark
-          text
-          v-bind="attrs">
-            OK
-        </v-btn>
+      <v-btn
+        color="white"
+        dark
+        text
+        v-bind="attrs"
+        @click="model = false"
+      >
+        OK
+      </v-btn>
     </template>
   </v-snackbar>
 </template>
@@ -26,6 +28,17 @@
 export default {
 
   components: {},
+
+  data () {
+    return {
+      model: false,
+      text: '',
+      timeout: 3000,
+      color: 'success',
+      textWentWrong: 'Something went wrong!',
+      textSuccess: 'Success!'
+    }
+  },
 
   created () {
     this.$nuxt.$on('show-snackbar', (success = true, message = '') => {
@@ -41,18 +54,6 @@ export default {
       this.timeout = success ? 3000 : 30000
       this.color = success ? 'success' : 'error'
       this.model = true
-    }
-  },
-
-  data () {
-    return {
-      model: false,
-      text: '',
-      timeout: 3000,
-      color: 'success',
-      textWentWrong: 'Nešto je pošlo krivo!',
-      textRequiredField: 'Provjerite obavezna polja!',
-      textSuccess: 'Uspješno!'
     }
   }
 }

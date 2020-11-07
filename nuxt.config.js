@@ -43,9 +43,10 @@ export default {
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
+    baseUrl: 'https://erstvermietung.emonitor.ch/api/objects',
     browserBaseURL: 'https://erstvermietung.emonitor.ch/api/objects',
     headers: {
-        'Accept': 'application/json',
+        'Accept': 'application/json'
     },
     debug: false
   },

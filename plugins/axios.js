@@ -1,5 +1,7 @@
-export default function ({ $axios }) {
+export default function ({ $axios, redirect, app }) {
+  $axios.onRequest((config) => {
+  })
   $axios.onError((error) => {
-    return { error, data: {} }
+    return Promise.resolve(error.response)
   })
 }
