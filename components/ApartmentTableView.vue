@@ -15,9 +15,12 @@
           <v-btn
             depressed
             color="primary"
+            class="text-none"
             @click="openAdd"
           >
-            <v-icon>mdi-plus</v-icon>
+            <v-icon class="mr-2">
+              mdi-plus
+            </v-icon>
             Add
           </v-btn>
         </div>
@@ -51,7 +54,7 @@
             </v-btn>
             <v-btn
               depressed
-              class="red darken-2"
+              color="error"
               @click="openDeleteDialog(item.title)"
             >
               <v-icon
@@ -278,6 +281,7 @@ export default {
     openAdd () {
       this.formTitle = 'Add'
       this.addDialog = true
+      this.form = this.defaultForm
     },
 
     closeAddDialog () {

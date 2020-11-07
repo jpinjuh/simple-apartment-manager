@@ -1,20 +1,23 @@
 <template>
   <v-container>
     <v-row>
-      <v-col class="title">Enter text and find out which character is repeated the most times:</v-col>
+      <v-col class="title">
+        Start typing and find out which character occurs the most times:
+      </v-col>
       <v-col cols="12">
         <v-textarea
           v-model="inputValue"
           outlined
+          placeholder="Start typing..."
           hide-details
         />
       </v-col>
       <v-col>
-        Character/s
+        Character(s)
         <span class="max-char font-weight-bold">{{ Object.keys(maxChar).join(', ') }}</span>
         occurs
         <span class="max-char font-weight-bold text-title">{{ Object.values(maxChar)[0] }}</span>
-        time/s
+        time(s).
       </v-col>
     </v-row>
   </v-container>

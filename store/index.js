@@ -35,12 +35,12 @@ export const mutations = {
 
 export const actions = {
   async getApartments ({ commit }) {
-    await this.$axios.get('/')
+    /* await this.$axios.get('/')
       .then((res) => {
         if (res.status === 200) {
           commit('setApartments', res.data)
         }
-      })
+      }) */
   },
 
   deleteApartment ({ commit }, title) {
