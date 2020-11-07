@@ -2,15 +2,15 @@ export const state = () => ({
   apartments: []
 })
 
-export const mutations = {
-  setApartments (state, apartments) {
-    state.apartments = apartments
-  }
-}
-
 export const getters = {
   getApartments (state) {
     return state.apartments
+  }
+}
+
+export const mutations = {
+  setApartments (state, apartments) {
+    state.apartments = apartments
   }
 }
 

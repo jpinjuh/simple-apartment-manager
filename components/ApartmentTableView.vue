@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col>
-        <div class="d-flex align-center">
+        <div class="d-flex align-center" style="height: 100%;">
           <v-icon
             @click="$nuxt.$emit('open-settings', headers)"
           >mdi-cog</v-icon>
@@ -23,7 +23,7 @@
     <v-row>
       <v-col>
         <v-data-table
-          :items="items"
+          :items="apartments"
           :headers="headers"
         >
           <template v-slot:[`item.building`]={item}>
@@ -32,6 +32,7 @@
           <template v-slot:[`item.lift`]={item}>
             {{ item.lift ? 'Yes' : 'No' }}
           </template>
+          <!-- table action buttons -->
           <template v-slot:[`item.actions`]="{}">
             <v-btn
               depressed
@@ -57,13 +58,14 @@
       </v-col>
     </v-row>
 
-    <!-- Table setting dialog -->
+    <!-- Table setting dialog for reordering columns-->
     <SettingDialog />
   </v-container>
 </template>
 
 <script>
 import SettingDialog from '../components/SettingDialog'
+
 export default {
   components: {
     SettingDialog

@@ -5,7 +5,7 @@
   >
     <v-card>
       <v-toolbar color="primary" dark class="elevation-0">
-        <v-toolbar-title>Change table columns order</v-toolbar-title>
+        <v-toolbar-title>Reorder columns</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn dark icon @click.native="closeDialog">
           <v-icon>mdi-close</v-icon>

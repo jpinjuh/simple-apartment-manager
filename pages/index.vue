@@ -13,6 +13,7 @@
       </v-tabs>
     </v-col>
 
+    <!-- tabs content -->
     <v-col cols="12">
       <ApartmentTableView v-if="selected === 0" />
       <CodingChallenge v-if="selected === 1" />
