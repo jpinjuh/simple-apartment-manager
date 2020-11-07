@@ -75,12 +75,11 @@ export default {
 
 <style>
   .ghost {
-    opacity: 0.2;
-    background: white;
+    opacity: 0.4;
   }
 
   .header-list {
-    border: 1px solid rgb(236 236 236);
+    border: 1px solid #e4e4e4;
     border-radius: 4px;
     background-color: #f3f3f3;
     cursor: pointer;

@@ -73,7 +73,7 @@
     >
       <v-card>
         <v-toolbar color="primary" dark class="elevation-0">
-          <v-toolbar-title>{{ dialogTitle }}</v-toolbar-title>
+          <v-toolbar-title>{{ formTitle }}</v-toolbar-title>
 
           <v-spacer />
 
@@ -84,7 +84,7 @@
 
         <v-container class="pt-8 px-6">
           <v-row v-for="item in items" :key="item.name">
-            <v-col>
+            <v-col class="pt-0">
               <!-- Textfield -->
               <v-text-field
                 v-if="item.tag === 'input'"
@@ -202,9 +202,18 @@ export default {
       ],
       deleteDialog: false,
       addDialog: false,
-      dialogTitle: null,
+      formTitle: null,
+      title: '',
       form: {
         lift: false
+      },
+      defaultForm: {
+        title: null,
+        state: null,
+        area: null,
+        rooms: null,
+        lift: null,
+        adress: null
       },
       items: [
         {
@@ -267,19 +276,17 @@ export default {
     },
 
     openAdd () {
-      this.dialogTitle = 'Add'
+      this.formTitle = 'Add'
       this.addDialog = true
     },
 
     closeAddDialog () {
       this.addDialog = false
-      this.form = {
-        lift: false
-      }
+      this.form = this.defaultForm
     },
 
     openEdit (item) {
-      this.dialogTitle = 'Edit'
+      this.formTitle = 'Edit'
       const { title, state, area, rooms, lift, building, rentalgross } = item
 
       this.form = {
@@ -292,6 +299,7 @@ export default {
       }
       this.form.adress = building ? building.adress : null
 
+      this.title = title
       this.addDialog = true
     },
 
@@ -311,7 +319,7 @@ export default {
 
       this.form.building = { adress: this.form.adress }
 
-      if (this.dialogTitle === 'Add') {
+      if (this.formTitle === 'Add') {
         this.addApartment()
       } else {
         this.updateApartment()
