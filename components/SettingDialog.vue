@@ -1,0 +1,81 @@
+<template>
+  <v-dialog
+    v-model="dialog"
+    width="350"
+  >
+    <v-card>
+      <v-toolbar color="primary" dark class="elevation-0">
+        <v-toolbar-title>Change table columns order</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn dark icon @click.native="closeDialog">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </v-toolbar>
+
+      <!-- draggable list -->
+      <v-container>
+        <v-row>
+          <v-col class="pa-6">
+            <draggable
+              ghost-class="ghost"
+              :list="tableHeaders"
+              @start="dragging = true"
+              @end="dragging = false"
+            >
+              <div
+                v-for="(header, index) in tableHeaders"
+                :key="index"
+                class="d-flex justify-center align-center py-3"
+                style="border: 1px solid #4a4747;"
+              >
+                {{ header.text }}
+              </div>
+            </draggable>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-card>
+  </v-dialog>
+</template>
+
+<script>
+import draggable from 'vuedraggable'
+
+export default {
+  components: {
+    draggable
+  },
+
+  data () {
+    return {
+      dialog: false,
+      tableHeaders: [],
+      dragging: false
+    }
+  },
+
+  created () {
+    this.$nuxt.$on('open-settings', (headers) => {
+      this.dialog = true
+      this.tableHeaders = headers
+    })
+  },
+
+  beforeDestroy () {
+    this.$nuxt.$off('open-settings')
+  },
+
+  methods: {
+    closeDialog () {
+      this.dialog = false
+    }
+  }
+}
+</script>
+
+<style>
+  .ghost {
+    opacity: 0.2;
+    background: white;
+  }
+</style>
