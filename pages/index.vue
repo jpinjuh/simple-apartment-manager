@@ -43,6 +43,7 @@ export default {
 
   created () {
     this.$store.dispatch('getApartments')
-  }
+  },
+  fetchOnServer: false
 }
 </script>
