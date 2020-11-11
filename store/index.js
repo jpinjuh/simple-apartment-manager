@@ -14,8 +14,7 @@ export const mutations = {
     state.apartments = apartments
   },
 
-  deleteApartment (state, title) {
-    const index = state.apartments.findIndex(apartment => apartment.title === title)
+  deleteApartment (state, index) {
     state.apartments.splice(index, 1)
   },
 
@@ -26,9 +25,7 @@ export const mutations = {
     state.apartments.push(form)
   },
 
-  updateApartment (state, { form, title }) {
-    const index = state.apartments.findIndex(apartment => apartment.title === title)
-
+  updateApartment (state, { form, index }) {
     state.apartments.splice(index, 1, form)
   }
 }
@@ -43,15 +40,15 @@ export const actions = {
       })
   },
 
-  deleteApartment ({ commit }, title) {
-    commit('deleteApartment', title)
+  deleteApartment ({ commit }, payload) {
+    commit('deleteApartment', payload)
   },
 
-  addApartment ({ commit }, form) {
-    commit('addApartment', form)
+  addApartment ({ commit }, payload) {
+    commit('addApartment', payload)
   },
 
-  updateApartment ({ commit }, { form, title }) {
-    commit('updateApartment', { form, title })
+  updateApartment ({ commit }, payload) {
+    commit('updateApartment', payload)
   }
 }

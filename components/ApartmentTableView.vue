@@ -16,7 +16,7 @@
             depressed
             color="primary"
             class="text-none"
-            @click="openAdd"
+            @click="addDialog = true"
           >
             <v-icon class="mr-2">
               mdi-plus
@@ -55,7 +55,7 @@
             <v-btn
               depressed
               color="error"
-              @click="openDeleteDialog(item.title)"
+              @click="openDeleteDialog(item)"
             >
               <v-icon
                 color="white"
@@ -148,36 +148,6 @@
       </v-card>
     </v-dialog>
 
-    <!-- delete dialog -->
-    <v-dialog
-      v-model="deleteDialog"
-      width="500"
-    >
-      <v-card>
-        <v-card-title
-          primary-title
-        >
-          Are you sure?
-        </v-card-title>
-
-        <v-card-text class="pt-5">
-          Are you sure you want to delete the selected resource?
-        </v-card-text>
-
-        <v-divider />
-
-        <v-card-actions>
-          <v-spacer />
-          <v-btn class="text-none" depressed large outlined @click="deleteDialog = false">
-            Odustani
-          </v-btn>
-          <v-btn class="text-none" color="error" depressed large @click="deleteApartment">
-            Izbriši
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
     <!-- Table setting dialog for reordering columns-->
     <SettingDialog :headers="headers" />
   </v-container>
@@ -205,23 +175,14 @@ export default {
       ],
       deleteDialog: false,
       addDialog: false,
-      formTitle: null,
+      editIndex: -1,
       title: '',
       form: {
         lift: false
       },
-      defaultForm: {
-        title: null,
-        state: null,
-        area: null,
-        rooms: null,
-        lift: null,
-        adress: null
-      },
       items: [
         {
           name: 'state',
-          rules: '',
           tag: 'select',
           source: ['active', 'assigned', 'inactive', 'reserved', 'vacant'],
           title: 'State',
@@ -229,35 +190,30 @@ export default {
         },
         {
           name: 'area',
-          rules: '',
           tag: 'input',
           title: 'Area',
           type: 'number'
         },
         {
           name: 'rooms',
-          rules: '',
           tag: 'input',
           title: 'Rooms',
           type: 'number'
         },
         {
           name: 'lift',
-          rules: '',
           tag: 'checkbox',
           title: 'Lift',
           type: 'boolean'
         },
         {
           name: 'adress',
-          rules: '',
           tag: 'input',
           title: 'Address',
           type: 'text'
         },
         {
           name: 'rentalgross',
-          rules: '',
           tag: 'input',
           title: 'Rentalgross',
           type: 'number'
@@ -269,29 +225,29 @@ export default {
   computed: {
     apartments () {
       return this.$store.getters.getApartments
+    },
+
+    formTitle () {
+      return (this.editIndex > -1) ? 'Edit apartment' : 'Add apartment'
     }
   },
 
   methods: {
-    openDeleteDialog (title) {
-      this.deleteDialog = true
-      this.title = title
-    },
-
-    openAdd () {
-      this.formTitle = 'Add'
-      this.addDialog = true
-      this.form = this.defaultForm
+    openDeleteDialog (item) {
+      this.editIndex = this.apartments.indexOf(item)
+      this.$nuxt.$emit('show-delete-dialog', 'deleteApartment', this.editIndex)
     },
 
     closeAddDialog () {
       this.addDialog = false
-      this.form = this.defaultForm
+      this.form = { lift: false }
+      this.editIndex = -1
     },
 
     openEdit (item) {
-      this.formTitle = 'Edit'
       const { title, state, area, rooms, lift, building, rentalgross } = item
+
+      this.editIndex = this.apartments.indexOf(item)
 
       this.form = {
         title,
@@ -307,14 +263,6 @@ export default {
       this.addDialog = true
     },
 
-    deleteApartment () {
-      this.$store.dispatch('deleteApartment', this.title)
-        .then(() => {
-          this.deleteDialog = false
-          this.$nuxt.$emit('show-snackbar', true)
-        })
-    },
-
     handleAction () {
       /* parsing form data */
       this.form.area = parseInt(this.form.area) || null
@@ -323,10 +271,10 @@ export default {
 
       this.form.building = { adress: this.form.adress }
 
-      if (this.formTitle === 'Add') {
-        this.addApartment()
-      } else {
+      if (this.editIndex > -1) {
         this.updateApartment()
+      } else {
+        this.addApartment()
       }
     },
 
@@ -339,7 +287,7 @@ export default {
     },
 
     updateApartment () {
-      this.$store.dispatch('updateApartment', { form: this.form, title: this.title })
+      this.$store.dispatch('updateApartment', { form: this.form, index: this.editIndex })
         .then(() => {
           this.closeAddDialog()
           this.$nuxt.$emit('show-snackbar', true)

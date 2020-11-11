@@ -18,17 +18,21 @@
       <ApartmentTableView v-if="selected === 0" />
       <CodingChallenge v-if="selected === 1" />
     </v-col>
+
+    <DeleteDialog />
   </v-row>
 </template>
 
 <script>
 import ApartmentTableView from '../components/ApartmentTableView'
 import CodingChallenge from '../components/CodingChallenge'
+import DeleteDialog from '../components/DeleteDialog'
 
 export default {
   components: {
     ApartmentTableView,
-    CodingChallenge
+    CodingChallenge,
+    DeleteDialog
   },
 
   data () {

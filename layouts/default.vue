@@ -12,7 +12,7 @@
                 <h3
                   class="white--text text-h5 text-sm-title"
                 >
-                  SAManager
+                  Apartment Manager
                 </h3>
               </nuxt-link>
             </v-col>
@@ -23,6 +23,7 @@
         <nuxt />
       </v-container>
     </v-main>
+
     <Snackbar />
   </v-app>
 </template>
