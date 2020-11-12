@@ -25,15 +25,21 @@
     </v-main>
 
     <Snackbar />
+    <DeleteDialog />
+    <AddDialog />
   </v-app>
 </template>
 
 <script>
 import Snackbar from '../components/Snackbar'
+import DeleteDialog from '../components/dialogs/DeleteDialog'
+import AddDialog from '../components/dialogs/AddDialog'
 
 export default {
   components: {
-    Snackbar
+    Snackbar,
+    DeleteDialog,
+    AddDialog
   },
 
   data () {

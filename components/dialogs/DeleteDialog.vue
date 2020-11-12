@@ -1,12 +1,10 @@
 <template>
   <v-dialog
-    v-model="deleteDialog"
+    v-model="dialog"
     width="500"
   >
     <v-card>
-      <v-card-title
-        primary-title
-      >
+      <v-card-title>
         Are you sure?
       </v-card-title>
 
@@ -18,10 +16,22 @@
 
       <v-card-actions>
         <v-spacer />
-        <v-btn class="text-none" depressed large outlined @click="deleteDialog = false">
+        <v-btn
+          class="text-none"
+          depressed
+          large
+          outlined
+          @click="dialog = false"
+        >
           Odustani
         </v-btn>
-        <v-btn class="text-none" color="error" depressed large @click="deleteItem">
+        <v-btn
+          class="text-none"
+          color="error"
+          depressed
+          large
+          @click="deleteItem"
+        >
           Izbriši
         </v-btn>
       </v-card-actions>
@@ -33,7 +43,7 @@
 export default {
   data () {
     return {
-      deleteDialog: false,
+      dialog: false,
       action: '',
       deleteIndex: null
     }
@@ -41,13 +51,13 @@ export default {
 
   created () {
     this.$nuxt.$on('show-delete-dialog', (action, index) => {
-      this.deleteDialog = true
+      this.dialog = true
       this.action = action
       this.deleteIndex = index
     })
 
     this.$nuxt.$on('close-delete-dialog', () => {
-      this.deleteDialog = false
+      this.dialog = false
     })
   },
 
@@ -55,7 +65,7 @@ export default {
     deleteItem () {
       this.$store.dispatch(this.action, this.deleteIndex)
         .then(() => {
-          this.deleteDialog = false
+          this.dialog = false
           this.$nuxt.$emit('show-snackbar', true)
         })
     }

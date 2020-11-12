@@ -4,11 +4,23 @@
     width="350"
   >
     <v-card>
-      <v-toolbar color="primary" dark class="elevation-0">
-        <v-toolbar-title>Reorder columns</v-toolbar-title>
+      <v-toolbar
+        color="primary"
+        dark
+        class="elevation-0"
+      >
+        <v-toolbar-title>
+          Reorder columns
+        </v-toolbar-title>
         <v-spacer />
-        <v-btn dark icon @click.native="closeDialog">
-          <v-icon>mdi-close</v-icon>
+        <v-btn
+          dark
+          icon
+          @click.native="closeDialog"
+        >
+          <v-icon>
+            mdi-close
+          </v-icon>
         </v-btn>
       </v-toolbar>
 
@@ -45,7 +57,14 @@ export default {
     draggable
   },
 
-  props: ['headers'],
+  props: {
+    headers: {
+      type: Array,
+      default: () => {
+        return []
+      }
+    }
+  },
 
   data () {
     return {
