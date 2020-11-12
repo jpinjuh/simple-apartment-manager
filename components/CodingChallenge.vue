@@ -13,10 +13,10 @@
         />
       </v-col>
       <v-col>
-        Character(s)
-        <span class="max-char font-weight-bold">{{ Object.keys(maxChar).join(', ') }}</span>
+        Character
+        <span class="max-char font-weight-bold">{{ maxChar.char }}</span>
         occurs
-        <span class="max-char font-weight-bold text-title">{{ Object.values(maxChar)[0] }}</span>
+        <span class="max-char font-weight-bold text-title">{{ maxChar.value }}</span>
         time(s).
       </v-col>
     </v-row>
@@ -35,24 +35,29 @@ export default {
 
   computed: {
     maxChar () {
-      let max = 0
-
       const obj = {}
-      for (const char of this.inputValue.split(' ').join('')) {
-        obj[char] = obj[char] + 1 || 1
-      }
+      let max = 0
+      let maxChar = ''
 
-      Object.keys(obj).forEach((char) => {
-        if (obj[char] > max) {
-          max = obj[char]
+      if (this.inputValue) {
+        for (const char of this.inputValue.split(' ').join('')) {
+          obj[char] = obj[char] + 1 || 1
         }
-      })
 
-      return Object.entries(obj).filter(([k, v]) => v === max).reduce((acc, val) => {
-        const [key, value] = val
-        acc[key] = value
-        return acc
-      }, {})
+        Object.keys(obj).forEach((char) => {
+          if (obj[char] > max) {
+            maxChar = char
+            max = obj[char]
+          }
+        })
+
+        return {
+          char: maxChar,
+          value: max
+        }
+      } else {
+        return this.inputValue
+      }
     }
   }
 }
