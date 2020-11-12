@@ -12,18 +12,37 @@
           hide-details
         />
       </v-col>
-      <v-col>
-        Character
-        <span class="max-char font-weight-bold">{{ maxChar.char }}</span>
-        occurs
-        <span class="max-char font-weight-bold text-title">{{ maxChar.value }}</span>
-        time(s).
+      <v-col cols="12">
+        <div class="mb-4 font-weight-bold">
+          Using JavaScript:
+        </div>
+        <div>
+          Character
+          <span class="max-char font-weight-bold">{{ maxChar.char }}</span>
+          occurs
+          <span class="max-char font-weight-bold text-title">{{ maxChar.value }}</span>
+          time(s).
+        </div>
+      </v-col>
+      <v-col cols="12">
+        <div class="mb-4 font-weight-bold">
+          Using Loadsh:
+        </div>
+        <div>
+          Character
+          <span class="max-char font-weight-bold">{{ loadshMaxChar[0] }}</span>
+          occurs
+          <span class="max-char font-weight-bold text-title">{{ loadshMaxChar[1] }}</span>
+          time(s).
+        </div>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import { countBy, entries, flow, last, maxBy, partialRight } from 'lodash'
+
 export default {
   components: {},
 
@@ -40,7 +59,7 @@ export default {
       let maxChar = ''
 
       if (this.inputValue) {
-        for (const char of this.inputValue.split(' ').join('')) {
+        for (const char of this.inputValue.replace(/\s/g, '')) {
           obj[char] = obj[char] + 1 || 1
         }
 
@@ -55,9 +74,23 @@ export default {
           char: maxChar,
           value: max
         }
-      } else {
-        return this.inputValue
       }
+
+      return this.inputValue
+    },
+
+    loadshMaxChar () {
+      if (this.inputValue) {
+        const inputText = this.inputValue.replace(/\s/g, '')
+
+        return flow(
+          countBy,
+          entries,
+          partialRight(maxBy, last)
+        )(inputText)
+      }
+
+      return this.inputValue
     }
   }
 }
